@@ -1,22 +1,23 @@
-const express = require('express');
+const express = require("express");
+const bodyParser = require("body-parser");
+
 const app = express();
-const PORT = 3000;
+const PORT = 3000; // You can change this to any available port you prefer
 
-// Middleware to parse JSON request bodies
-app.use(express.json());
+// Middleware to parse JSON data
+app.use(bodyParser.json());
 
-// Webhook endpoint
-app.post('/gitlab-webhook', (req, res) => {
-  const eventData = req.body; // Data from GitLab
+// Storage for received JSON data
+const jsonData = [];
 
-  // Process and store the eventData as needed
-  console.log('Received webhook data:', eventData);
-
-  // Send a response back to GitLab
-  res.status(200).json({ message: 'Webhook received successfully' });
+// Endpoint to store JSON data
+app.post("/data", (req, res) => {
+  const data = req.body;
+  jsonData.push(data);
+  res.status(201).json({ message: "JSON data stored successfully" });
 });
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`Server is listening on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
